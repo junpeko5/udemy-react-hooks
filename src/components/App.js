@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useState, useReducer } from 'react';
+
+import reducer from '../reducers'
 
 const App = () => {
+  const [state, dispatch] = useReducer(reducer, []);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+
+  const addEvent = e => {
+    e.preventDefault();
+    dispatch({
+      type: 'CREATE_EVENT',
+      title,
+      body
+    });
+    setTitle('');
+    setBody("");
+  }
+  console.log(state)
   return (
     <div className="container-fluid">
       <h4>イベント作成フォーム</h4>
       <form>
         <div className="form-group">
           <label htmlFor="formEventTitle">タイトル</label>
-          <input type="text" className="form-control" id="formEventTitle" />
+          <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="form-control" id="formEventTitle" />
         </div>
         <div className="form-group">
           <label htmlFor="formEventBody">ボディー</label>
-          <textarea type="text" className="form-control" id="formEventBody" />
+          <textarea type="text" value={body} onChange={(e => setBody(e.target.value))} className="form-control" id="formEventBody" />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="button" onClick={addEvent} className="btn btn-primary">
           イベントを作成する
         </button>
         <button type="submit" className="btn btn-danger">
@@ -24,9 +41,9 @@ const App = () => {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">タイトル</th>
-            <th scope="col">ボディー</th>
+            <th>ID</th>
+            <th>タイトル</th>
+            <th>ボディー</th>
           </tr>
         </thead>
         <tbody>
@@ -34,17 +51,15 @@ const App = () => {
             <th scope="row">1</th>
             <td>Mark</td>
             <td>Otto</td>
-            <td>@mdo</td>
           </tr>
           <tr>
             <th scope="row">2</th>
             <td>Jacob</td>
             <td>Thornton</td>
-            <td>@fat</td>
           </tr>
           <tr>
             <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
+            <td>Larry the Bird</td>
             <td>@twitter</td>
           </tr>
         </tbody>

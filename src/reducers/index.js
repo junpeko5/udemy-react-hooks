@@ -1,5 +1,3 @@
-
-
 const events = (state = [], action) => {
   switch (action.type) {
     case 'CREATE_EVENT':

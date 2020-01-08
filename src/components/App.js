@@ -19,22 +19,55 @@ const App = () => {
     setBody("");
   }
 
+  const deleteAllEvents = e => {
+    e.preventDefault();
+    if (window.confirm('全てのイベントを本当に削除しても良いですか？')) {
+      dispatch({
+        type: "DELETE_ALL_EVENTS"
+      });
+    }
+  }
+
+  const unCreatable = (title === '' || body === '');
+
   return (
     <div className="container-fluid">
       <h4>イベント作成フォーム</h4>
       <form>
         <div className="form-group">
           <label htmlFor="formEventTitle">タイトル</label>
-          <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="form-control" id="formEventTitle" />
+          <input
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            className="form-control"
+            id="formEventTitle"
+          />
         </div>
         <div className="form-group">
           <label htmlFor="formEventBody">ボディー</label>
-          <textarea type="text" value={body} onChange={(e => setBody(e.target.value))} className="form-control" id="formEventBody" />
+          <textarea
+            type="text"
+            value={body}
+            onChange={e => setBody(e.target.value)}
+            className="form-control"
+            id="formEventBody"
+          />
         </div>
-        <button type="button" onClick={addEvent} className="btn btn-primary">
+        <button
+          type="button"
+          onClick={addEvent}
+          className="btn btn-primary"
+          disabled={unCreatable}
+        >
           イベントを作成する
         </button>
-        <button type="submit" className="btn btn-danger">
+        <button
+          type="button"
+          onClick={deleteAllEvents}
+          className="btn btn-danger"
+          disabled={state.length === 0}
+        >
           全てのイベントを削除する
         </button>
       </form>
@@ -45,10 +78,13 @@ const App = () => {
             <th>ID</th>
             <th>タイトル</th>
             <th>ボディー</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          { state.map((event) => <Event key={event.id} event={event} dispatch={dispatch} />) }
+          {state.map(event => (
+            <Event key={event.id} event={event} dispatch={dispatch} />
+          ))}
         </tbody>
       </table>
     </div>

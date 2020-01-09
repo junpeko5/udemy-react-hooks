@@ -1,11 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { CREATE_EVENT, DELETE_ALL_EVENTS } from "../actions";
+import {
+  CREATE_EVENT,
+  DELETE_ALL_EVENTS,
+  ADD_OPERATION_LOG,
+  DELETE_ALL_OPERATION_LOGS
+} from "../actions";
 import AppContext from '../contexts/AppContext';
+import { timeCurrentIso8601 } from '../utils';
 
 const EventForm = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const {state, dispatch} = useContext(AppContext);
+  console.log(timeCurrentIso8601())
 
   const addEvent = e => {
     e.preventDefault();
@@ -13,6 +20,12 @@ const EventForm = () => {
       type: CREATE_EVENT,
       title,
       body
+    });
+
+    dispatch({
+      type: ADD_OPERATION_LOG,
+      description: "イベントを作成しました。",
+      operatedAt: timeCurrentIso8601()
     });
     setTitle("");
     setBody("");
@@ -23,6 +36,11 @@ const EventForm = () => {
     if (window.confirm("全てのイベントを本当に削除しても良いですか？")) {
       dispatch({
         type: DELETE_ALL_EVENTS
+      });
+      dispatch({
+        type: ADD_OPERATION_LOG,
+        description: "全てのイベントを削除しました。",
+        operatedAt: timeCurrentIso8601()
       });
     }
   };
